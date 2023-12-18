@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Los Simpsons</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-image: url('https://cdn.pixabay.com/photo/2012/02/22/09/12/background-15226_1280.jpg');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    #simpsons-info {
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: rgba(255, 255, 255, 0.8); 
+      border-radius: 10px; 
+    }
+
+    h1 {
+      color: #F05D23; 
+    }
+
+    p {
+      color: #2E2E2E; 
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="simpsons-info">
+    <h1>Cargando...</h1>
+  </div>
+
+  <script>
+    async function fetchSimpsonsData() {
+      try {
+        const response = await fetch('https://apisimpsons.fly.dev/api/personajes/find/alegria');
+        const jsonData = await response.json();
+
+        const simpsonsInfoElement = document.getElementById('simpsons-info');
+        const data = jsonData.result[0]; 
+
+        if (data && data.Nombre) {
+          simpsonsInfoElement.innerHTML = `
+            <h1>${data.Nombre}</h1>
+            <p>${data.Historia}</p>
+            <img src="${data.Imagen}" alt="${data.Nombre}">
+          `;
+        } else {
+          simpsonsInfoElement.innerHTML = '<h1>Error en los datos recibidos</h1>';
+        }
+      } catch (error) {
+        console.error('Error fetching Simpsons data:', error);
+        const simpsonsInfoElement = document.getElementById('simpsons-info');
+        simpsonsInfoElement.innerHTML = '<h1>Error fetching data</h1>';
+      }
+    }
+
+    fetchSimpsonsData();
+  </script>
+</body>
+</html>
